@@ -1,0 +1,422 @@
+
+
+.style{
+
+  padding-left: 70px;
+
+}
+.scrollable-menu {
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
+}
+
+span.mandatindi {
+  color: #ff0000;
+}
+/* Turn off parallax scrolling for tablets and phones */
+@media only screen and (max-device-width: 1024px) {
+  .parallax{
+      background-attachment: scroll;
+  }
+}
+
+
+
+
+.parallax {
+  /* The image used */
+  background-image: url('../background/parallax.jpg');
+
+  /* Full height */
+  height: 100%;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+body, html {
+  height: 100%;
+}
+
+
+
+
+div.advs:hover {
+
+  cursor: pointer;
+  color: #3965e4;
+}
+
+.advanceopt {
+  font-weight: bold;
+  color: white;
+
+  font-size: 1.1em;
+
+
+}
+
+
+
+.adddhide {
+  display : none;
+  font-family: 'Open Sans', sans-serif;
+
+}
+
+option {
+
+
+  font-family: 'Open Sans', sans-serif;
+
+}
+
+
+
+li { cursor: pointer; }
+
+
+.search2hide {
+
+  display: none;
+}
+
+.advs {
+
+  color: white;
+  font-family: 'Arial Black';
+
+}
+
+@media only screen and (min-width: 575px) and (max-width: 660px)
+{
+
+  .srchbtn {
+
+      font-size: 0.7em;
+      padding-left: -2px;
+
+
+  }
+}
+
+
+
+@media only screen and (max-width: 1182px)
+{
+  button.marg {
+
+  width: 100%;
+  overflow-x: auto;
+  font-size: 0.7em;
+
+
+  }
+
+
+
+}
+
+.btnfocus:focus {
+outline: none;
+}
+
+
+.required label {
+  font-weight: bold;
+}
+.required label:after {
+  color: white;
+  content: ' *';
+  display:inline;
+}
+
+.tablehide{
+
+  display: none;
+}
+
+.subjecthide {
+
+  display: none;
+}
+
+.coursehide {
+
+  display: none;
+}
+
+
+/* Second page CSS */
+
+.styleside{
+
+            font-family: 'Open Sans', sans-serif;
+        }
+
+
+input.form-check-input
+{
+  margin-top: 0.2rem;
+
+}
+
+
+
+td {
+
+  color: #333;
+  font-size: 12.5px;
+  font-weight: 500;
+
+}
+
+
+        .schoolhover{
+
+            box-shadow: 0 0 2px #003057;
+
+        }
+        .schoolhover:hover {
+
+
+            cursor: pointer;
+
+        }
+
+.fontbanner {
+
+  font-family: 'Montserrat', sans-serif;
+}
+
+.frontformfont {
+
+  font-size: 1.5em;
+  color:white;
+  font-family: 'Montserrat', sans-serif;
+
+}
+
+.breakw {
+
+  font-family: 'Open Sans', sans-serif;
+}
+
+.selectstate {
+
+  font-family: 'Open Sans', sans-serif;
+}
+
+@media only screen and (max-width: 525px)
+{
+
+   .fontbanner {
+
+       line-height: 1.1;
+       font-size: 1.4em;
+
+   }
+
+   .frontformfont {
+
+       font-size: 1.3em;
+
+   }
+
+}
+
+
+      #loading-image {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 250px;
+
+      width: 100px;
+      height: 100px;
+
+}
+
+  @media only screen and (min-width: 1655px)
+  {
+
+      .modal-lg {
+          max-width: 58%;
+      }
+
+
+
+}
+
+@media only screen and (max-width: 1654px) and (min-width: 1005px)
+  {
+
+      .modal-lg {
+          max-width: 98%;
+      }
+
+
+
+}
+
+@media only screen and (max-width: 1004px) and (min-width: 634px)
+  {
+
+      .modal-lg {
+          max-width: 78%;
+
+      }
+
+      #get_pdf {
+
+          width:200%;
+
+      }
+
+
+}
+
+
+@media only screen and (max-width: 633px)
+  {
+
+      .modal-lg {
+          max-width: 78%;
+
+      }
+
+      #get_pdf {
+
+          width:350%;
+
+      }
+
+
+}
+ @media only screen and (min-width: 1182px)
+ {
+        #loader_subj {
+display: none;
+position: absolute;
+left: 69%;
+top: 21%;
+z-index: 1;
+width: 100px;
+height: 100px;
+margin: -75px 0 0 -75px;
+border: 16px solid #f3f3f3;
+border-radius: 50%;
+border-top: 16px solid #3498db;
+width: 20px;
+height: 20px;
+-webkit-animation: spin 2s linear infinite;
+animation: spin 2s linear infinite;
+}
+        #loader_course {
+ display:none;
+position: absolute;
+left: 69%;
+top: 36.5%;
+z-index: 1;
+width: 100px;
+height: 100px;
+margin: -75px 0 0 -75px;
+border: 16px solid #f3f3f3;
+border-radius: 50%;
+border-top: 16px solid #3498db;
+width: 20px;
+height: 20px;
+-webkit-animation: spin 2s linear infinite;
+animation: spin 2s linear infinite;
+}
+
+}
+#loader_adv {
+  display:none;
+position: absolute;
+left: 63%;
+top: 115%;
+z-index: 1;
+width: 100px;
+height: 100px;
+margin: -75px 0 0 -75px;
+border: 16px solid #f3f3f3;
+border-radius: 50%;
+border-top: 16px solid #3498db;
+width: 40px;
+height: 40px;
+-webkit-animation: spin 2s linear infinite;
+animation: spin 2s linear infinite;
+}
+
+#loader_adv1 {
+  display:none;
+position: absolute;
+left: 65%;
+top: 105%;
+z-index: 1;
+width: 100px;
+height: 100px;
+margin: -75px 0 0 -75px;
+border: 16px solid #f3f3f3;
+border-radius: 50%;
+border-top: 16px solid #3498db;
+width: 40px;
+height: 40px;
+-webkit-animation: spin 2s linear infinite;
+animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+0% { -webkit-transform: rotate(0deg); }
+100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
+
+#btnmize {
+
+  color: white;
+}
+
+
+
+table.dataTable > tbody > tr > td {
+
+  padding: 17px 14px;
+
+}
+
+table.dataTable tbody tr td.select-checkbox:before {
+
+  margin-top: 3px;
+}
+
+table.dataTable tbody tr.selected td.select-checkbox:after {
+
+  margin-top: 0px;
+
+}
+
+
+
+table.dataTable > tbody > tr:hover {
+
+
+  cursor: pointer;
+
+}
+
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
+
+  font-size: 13px;
+
+}
+
