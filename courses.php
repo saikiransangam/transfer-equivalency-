@@ -42,9 +42,21 @@
       language: {
         search: "_INPUT_",
         searchPlaceholder: "Search",
-      }
+      },
+      columnDefs: [{
+        orderable: false,
+        className: 'select-checkbox',
+        targets: 0
+      }],
+      select:{
+        style: 'multi',
+        selector: 'td:first-child'
+      },
+      order: [
+        [1, 'asc']
+      ],
     });
-    } );
+    });
   </script>
   <script> 
    $(document).on("click", "#counselor", function () {
@@ -56,26 +68,20 @@
               
   });
   </script>
-  
-<script>
-  $(document).ready(function(){
-    var tableControl = document.getElementById('data');
-    var arrayofValues = [];
-    $('#getdata').click(function(){
-      $('input:checkbox:checked', tableControl).each(function(){
-        arrayofValues.push($(this).closest('tr').find('td:last').text());
-      }).get();
-    });
-  });
-</script>
+  <script>
+    $('#myTable').on('change', 'input[type="checkbox"]', function( ) {
+             alert(this.value)
+        } );
+  </script>
 <script>
          $(document).ready(function(){
              var state= document.getElementById("selectstate").value;
-        $.ajax({
+            //var school= $_POST['school_state'];
+       /* $.ajax({
             url: 'schoolsidebar.php',
             type: 'POST',
             datatype: 'json',
-            data: {state_id: state},
+            data: {state_id: state, school_id: school},
             
             success: function(html){
                 $('#selectschool').append(html);
@@ -85,7 +91,7 @@
             }
 
 
-           });
+           });*/
        
            
 
@@ -99,6 +105,8 @@
                 
                 success: function(html){
                     $('#selectschool').empty();
+                    $('#selectsubject').empty();
+                    $('#selectcourse').empty();
                     $('#selectschool').append(html);
                 },
                 error: function(){
@@ -108,8 +116,26 @@
         });
 
 
+
         $('#selectschool').change(function(){
+            var state_selected = document.getElementById("selectstate").value;
             var school_selected = document.getElementById("selectschool").value;
+            //alert("handle");
+            
+            $.ajax({
+              url: 'table_content.php',
+              type: 'POST',
+              datatype: 'json',
+              data: {state_id: state_selected, school_id: school_selected},
+
+              success: function(html){
+                $('#tablechange').empty();
+                $('#tablechange').append(html);
+              },
+              error: function(){
+                alert("error");
+              } 
+            });
             $.ajax({
                 url: 'subjectsidebar.php',
                 type: 'POST',
@@ -118,7 +144,8 @@
                 
                 success: function(html){
                     $('#selectsubject').empty();
-                    $('#selectsubject').append(html);
+                    $('#selectcourse').empty();
+                    $('#selectsubject').append(html);                   
                 },
                 error: function(){
                     alert("error");
@@ -132,6 +159,22 @@
         $('#selectsubject').change(function(){
             var school_selected = document.getElementById("selectschool").value;
             var subject_selected = document.getElementById("selectsubject").value;
+            $.ajax({
+              url: 'table_content_subj.php',
+              type: 'POST',
+              datatype: 'json',
+              data: {school_id: school_selected, subject_id: subject_selected},
+              success: function(html){
+                $('#tablechange').empty();
+                $('#tablechange').append(html);
+              } ,
+              error: function(){
+                alert('error');
+              } 
+
+            });
+
+
             $.ajax({
                 url: 'coursesidebar.php',
                 type: 'POST',
@@ -151,101 +194,80 @@
             });
         });
         
-     
-       
-       
+        $('#selectcourse').change(function(){
+           var school_selected = document.getElementById("selectschool").value;
+           var subject_selected = document.getElementById("selectsubject").value;
+           var course_selected = document.getElementById("selectcourse").value;
+           
+           $.ajax({
+             url: 'table_content_crse.php',
+             type: 'POST',
+             datatype: 'json',
+             data: {school_id: school_selected,
+                  subject_id: subject_selected, course_id: course_selected},
+             success: function(html){
+               $('#tablechange').empty();
+               $('#tablechange').append(html);
+             }
+           })
+        });
 
 
 
-  
-     
-        
-       });
-       </script>
-       
+        $("#resetall").on("click", function(){
+          $('#selectstate')[0].selectedIndex = 0;
 
-
-
-
-
-
-
-
-
-
-
-
-       <script>
-        $(document).ready(function(){
-        $('#selectstate').change(function(){
-                $.ajax({
-                url: 'sideaction.php',
+          $('#tablechange').empty();
+          var state = document.getElementById("selectstate").value;
+            $.ajax({
+                url: 'schoolsidebar.php',
                 type: 'POST',
                 datatype: 'json',
                 data: {state_id: state},
                 
                 success: function(html){
-                    $('#myTable').empty();
-                    $('#myTable').append(html);
+                    $('#selectschool').empty();
+                    $('#selectsubject').empty();
+                    $('#selectcourse').empty();
+                    $('#selectschool').append(html);
                 },
                 error: function(){
                     alert("error");
                 }
-
-
-            });
-        });
+           });
+        })
+        
       });
-      </script>
-  
-  <script>
-       var listelements = [];
-       function onchecked(event){
-        if (event.checked && !listelements.contains(event.parentNode.parentElement))
-          listelements.push(event.parentNode.parentElement)
-
-
-
-            // var course_data = document.getElementById("checkbox").value;
-           
-            $.ajax({
-                 type: 'POST',
-                 datatype: 'json',
-                 data: {course_list: listelements},
-                
-                 success: function(html){
-                     $('#course_list').empty();
-                     $('#course_list').append(html);
-                 },
-                 error: function(){
-                     alert("error");
-                 }
-
-
-            // });
-        }
        </script>
+     <!-- <script>
+         $(document).ready(function(){
+             var state= document.getElementById("selectstate").value;
+             var subject= document.getElementById("selectsubject").value;
+        $.ajax({
+            url: 'sideaction.php',
+            type: 'POST',
+            datatype: 'json',
+            data: {state_id: state, subject_id: subject},
+            
+            success: function(html){
+                $('#myTable').append(html);
+            },
+            error: function(){
+                alert("error");
+            }
 
-        <script>
-        $(".reset").on("click", function () {
-      $(".filtersubjects").html("Please Select State and School");
-      $(".filtercourse").html("Please Select State and School");
-      $(".filterschools").html("Please Select a State");
-      $(".btnschlhide").text("");
-      $(".btnstatehide").text("");
-      $("#stateselfil").hide();
-      $("#schoolselfil").hide();
-      $('input:checkbox[name="option_state"]').each(function () {
-          if ($(this).is(':checked')) {
-              $(this).prop('checked', false);
-          }
-      });
-      $(".firstacc").hide();
-      $(".spanschool").text("");
-      $("#schooltexthide").text("");
-  });
-        </script>
 
+           });
+
+
+         });
+       
+           
+       
+          
+      </script>-->
+       
+       
 
   
   <!--Nav bar Implementation-->
@@ -258,15 +280,14 @@
     <!--Navbar ends-->
     <!--Side bar-->
     <div class="w3-sidebar w3-bar-block w3-collapse w3-card w3-animate-left styleside" style="width:300px; background-color: white;" id="sidebar">
-        <button type="button" style="color: #6c6c6c; font-size: 12px; font-weight: bold;" class="btn btn-link reserbtn mt-2 reset"><span style="padding-right:2px">Reset All</span></button>
+        <button type="button" style="color: #6c6c6c; font-size: 12px; font-weight: bold;" class="btn btn-link reserbtn mt-2 reset" id = "resetall"><span style="padding-right:2px">Reset All</span></button>
 
          <div class="fontbanner pt-1 pb-3" style="color: #00223d; font-size: 15px;">STATE</div>
             <div class="row mb-4">
                 <div class="col-sm-11">
                     <form action="">
                         <div class="form-group">
-                        <input type="text" class="form-control-sm col-sm-12" style="border: 1px solid #d1d1e0; box-shadow: 0 2px 2px -2px gray; font-size: 0.7em" placeholder="search State" onkeyup = "myState">
-                            <select style="color: black; font-weight: bold; overflow: scroll;" size = "7" class="form-control form-control-sm col-sm-12" id = "selectstate" reuired>
+                            <select style="color: black; font-weight: bold; overflow: scroll;" size = "7" class="form-control form-control-sm col-sm-12" id = "selectstate" required>
                                   
                             <?php
                                       include 'config/config.php';
@@ -278,7 +299,7 @@
                                       
                                       //sort($res['STVSTAT_DESC']);
                                       for ($i=0; $i < $length; $i++){ 
-                                          if($res['STVSTAT_DESC'][$i] == "Virginia" ){
+                                          if($res['STVSTAT_CODE'][$i] == $_POST['state_state'] ){
                                           
                                           echo '<option value = "'.$res['STVSTAT_CODE'][$i].'" selected>'.$res['STVSTAT_DESC'][$i].'</option>';
                                           }
@@ -298,8 +319,33 @@
               <div class="col-sm-11">
                   <form action="">
                       <div class="form-group">
-                      <input type="text" class="form-control-sm col-sm-12" style="border: 1px solid #d1d1e0; box-shadow: 0 2px 2px -2px gray; font-size: 0.7em" placeholder="search School" onkeyup="mySchool">
                           <select style="color: black; font-weight: bold;overflow: scroll;" size = "7" class="form-control form-control-sm col-sm-12" id ="selectschool">
+                          <?php 
+                                              include 'config/config.php';
+                                              $school = $_POST['school_state']; 
+                                              //echo $_POST['school_state'];
+                                              //echo $_POST['school_state'];
+
+                                              $query = "SELECT STVSBGI_CODE,STVSBGI_DESC FROM V_WX_SCHOOL_LIST WHERE  STVSTAT_CODE = '{$_POST['state_state']}' ORDER BY STVSBGI_DESC ASC";
+                                              $result = oci_parse($conn, $query);
+                                              oci_execute($result);
+                                              oci_fetch_all($result, $rec);
+                                              $length = count($rec['STVSBGI_DESC']);
+                                              echo $length;
+                                             // sort($rec['STVSBGI_DESC']);
+                                              for ($i=0; $i < $length; $i++){ 
+                                                if($rec['STVSBGI_CODE'][$i] == $school){
+                                          
+                                            echo '<option value = "'.$rec['STVSBGI_CODE'][$i].'" selected> '.$rec['STVSBGI_DESC'][$i].'</option>';
+                                                }
+                                                else{
+                                                  echo '<option value = "'.$rec['STVSBGI_CODE'][$i].'"> '.$rec['STVSBGI_DESC'][$i].'</option>';
+                                                }
+                                          }
+                                         
+                                          
+                                      oci_close($conn);
+                                          ?>
                           
                           </select>
                       </div>
@@ -311,7 +357,6 @@
             <div class="col-sm-11">
                 <form action="">
                     <div class="form-group">
-                    <input type="text" class="form-control-sm col-sm-12" style="border: 1px solid #d1d1e0; box-shadow: 0 2px 2px -2px gray; font-size: 0.7em" placeholder="search Subject">
                         <select style="color: black; font-weight: bold; overflow: scroll;" size = "7" class="form-control form-control-sm col-sm-12" id="selectsubject">
                         
                         </select>
@@ -324,7 +369,6 @@
           <div class="col-sm-11">
               <form action="">
                   <div class="form-group">
-                  <input type="text" class="form-control-sm col-sm-12" style="border: 1px solid #d1d1e0; box-shadow: 0 2px 2px -2px gray; font-size: 0.7em" placeholder="Search Course Number">
                       <select style="color: black; font-weight: bold; overflow: scroll;" size = "7" class="form-control form-control-sm col-sm-12" id="selectcourse">
                       
                       </select>
@@ -342,7 +386,7 @@
                   <div class="w3-right-align pt-2">
                   <button id="counselor" style="background-color:#00223d; color:white" class="w3-button w3-border w3-small" target='_blank'>Contacta Transfer Counselor</button>
                   <button id="mycourses" style="background-color:#00223d; color:white" class="w3-button w3-border w3-small" data-toggle="modal" data-target="#modal1">My Courses
-                  <span class="badge badge-light ml-1 badgecount">0</span></button>
+                  <span class="badge badge-light ml-1 badgecount"></span></button>
                   <button id="email" style="background-color:#00223d; color:white" class="w3-button w3-border w3-small" data-toggle="modal" data-target="#modal2">Email My Courses</button>
                   <button id="print" style="background-color:#00223d; color:white" onclick="window.print()" class="w3-button w3-border w3-small">print &nbsp;<i class="fas fa-print"></i></button> 
 
@@ -379,6 +423,8 @@
                                                                 <th scope="col">Equivalent Credits</th>
                                                             </tr>
                                                       </thead>
+                                                      <tbody id="favtable">
+                                                      </tbody>
                                                 </table>
                                               </div>
                                           </div>
@@ -415,7 +461,7 @@
                               <label>Email ID:</label>
                               <input type="email" class="form-control form-control-sm emailid" id="emid" name="emailid" required>
                             </div>
-                              <button type="button" class="btn btn-sm emailsb" style="background-color: #003057; color:white">Send</button>
+                              <button type="button" class="btn btn-sm email_send" style="background-color: #003057; color:white">Send</button>
                           </form>
                           <div class="reqemail mt-2" styel="color:red"></div>
                         </div>
@@ -438,8 +484,7 @@
                                     <th scope="col">Credits</th>
                                     <th scope="col">Equivalent Course</th>
                                     <th scope="col">Equivalent Course Name</th>
-                                    <th scope="col">Equivalent Credits</th>
-                                   
+                                    <th scope="col">Equivalent Credits</th>   
                                 </tr>
                               </thead>
                               <tbody id = "tablechange"> 
@@ -450,8 +495,11 @@
                                       include "config/config.php";
                                       $records = "";
                                       if(isset($_POST['school_state'])){
-                                      $records = "SELECT SBGI_CODE,CRSE_NUMB_FROM_SCHOOL, SUBJ_CODE_FROM_SCHOOL, CRSE_TITLE_FROM_SCHOOL, SHBTATC_CREDITS_FROM_SCHOOL, INST_CREDITS_ODU, listagg(CONCAT(CONCAT(CONCAT(CONCAT(SUBJ_CODE_INST_ODU, ' '), CRSE_NUMB_INST_ODU), '<BR>'), DECODE(CONNECTOR_COL_ODU, 'NULL', '<BR> ', CONNECTOR_COL_ODU)), '<BR>') WITHIN GROUP(ORDER BY CRSE_NUMB_INST_ODU, SUBJ_CODE_FROM_SCHOOL ) AS EQUIVALENT, listagg(CONCAT(CONCAT(INST_TITLE_ODU,'<BR> '), DECODE(CONNECTOR_COL_ODU, 'NULL', '<BR>', CONNECTOR_COL_ODU)), '<BR>') WITHIN GROUP( ORDER BY CRSE_NUMB_INST_ODU, SUBJ_CODE_FROM_SCHOOL ) AS EQUIVALENTCOURSE
-                                      FROM V_WX_EQUIVALENCY_LIST WHERE SBGI_CODE ='".$_POST['school_state']."'";
+                                      $records = "SELECT SBGI_CODE, CRSE_NUMB_FROM_SCHOOL, SUBJ_CODE_FROM_SCHOOL, CRSE_TITLE_FROM_SCHOOL, SHBTATC_CREDITS_FROM_SCHOOL, SUM(INST_CREDITS_ODU) AS INST_CREDITS_ODU,
+                                      LISTAGG(SUBJ_CODE_INST_ODU || ' ' || CRSE_NUMB_INST_ODU,'<BR>'||' ~ ' || '<BR>') AS test
+                                      ,LISTAGG(DECODE(CONNECTOR_COL_ODU, 'NULL','', TRIM(CONNECTOR_COL_ODU)), ' ') as test_con
+                                      ,LISTAGG(INST_TITLE_ODU || '<BR>' || '~ ','<BR> ') AS TEST1
+                                      FROM V_WX_EQUIVALENCY_LIST  WHERE SBGI_CODE ='".$_POST['school_state']."'";
                                       }
                                       
                                       if(isset($_POST['select_subject'])){
@@ -462,7 +510,7 @@
                                         $records = $records."AND CRSE_NUMB_FROM_SCHOOL = '".$_POST['select_course']."' ";
                                       }
                                       //$records = $records."decode(CONNECTOR_COL_ODU,'NULL', '')";
-                                      $records = $records."GROUP BY SBGI_CODE, CRSE_NUMB_FROM_SCHOOL, SUBJ_CODE_FROM_SCHOOL, CRSE_TITLE_FROM_SCHOOL, SHBTATC_CREDITS_FROM_SCHOOL, INST_CREDITS_ODU ORDER BY SUBJ_CODE_FROM_SCHOOL ASC, CRSE_NUMB_FROM_SCHOOL"; 
+                                      $records = $records."GROUP BY SBGI_CODE, CRSE_NUMB_FROM_SCHOOL, SUBJ_CODE_FROM_SCHOOL, CRSE_TITLE_FROM_SCHOOL, SHBTATC_CREDITS_FROM_SCHOOL ORDER BY SUBJ_CODE_FROM_SCHOOL, CRSE_NUMB_FROM_SCHOOL ASC"; 
                                       $result = oci_parse($conn, $records);
                                     //  echo "SELECT SBGI_CODE,CRSE_NUMB_FROM_SCHOOL, SUBJ_CODE_FROM_SCHOOL, CRSE_TITLE_FROM_SCHOOL, SHBTATC_CREDITS_FROM_SCHOOL, CONNECTOR_COL_ODU, CRSE_NUMB_INST_ODU, SUBJ_CODE_INST_ODU, INST_TITLE_ODU FROM V_WX_EQUIVALENCY_LIST WHERE SBGI_CODE ='".$_POST['school_state']."' ORDER BY SUBJ_CODE_FROM_SCHOOL ASC";
                                     //$num_per_page = 10;
@@ -477,15 +525,15 @@
                                  
                                  // var_dump($item);
                               ?> <tr>
-                                 <td><?php echo '<input type="checkbox" id="checkbox" name="value" value="course" onclick="onchecked(this)">' ?>
+                                 <td><?php echo '<input type="checkbox" data-toggle="tooltip" data-placement="bottom" title class="select-checkbox" id ="course_fav" data-orginal-title="Add To Favourites">'?>
                                  <td><?php echo $table_res['SUBJ_CODE_FROM_SCHOOL'][$i]. ' '.$table_res['CRSE_NUMB_FROM_SCHOOL'][$i] ?></td>
                                  <td><?php echo $table_res['CRSE_TITLE_FROM_SCHOOL'][$i] ?></td>
                                  <td><?php echo $table_res['SHBTATC_CREDITS_FROM_SCHOOL'][$i] ?></td>
-                                 <td><?php echo $table_res['EQUIVALENT'][$i]?></td>
-                                 <td><?php echo $table_res['EQUIVALENTCOURSE'][$i]?></td>
+                                 <td><?php echo vsprintf(str_replace('~', '%s', $table_res['TEST'][$i]), explode(" ", $table_res['TEST_CON'][$i])) ?></td>
+                                 <td><?php echo str_replace('~', explode(" ", $table_res['TEST_CON'][$i])[0],  substr($table_res['TEST1'][$i], 0, -2)) ?></td>
                                  <td><?php echo $table_res['INST_CREDITS_ODU'][$i]?></td>
                                </tr>
-                               <?php         } 
+                               <?php         }
                                       
                                   
                                       oci_close($conn); ?>

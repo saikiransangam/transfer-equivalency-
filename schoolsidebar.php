@@ -8,8 +8,13 @@
                                               $length = count($rec['STVSBGI_DESC']);
                                              // sort($rec['STVSBGI_DESC']);
                                               for ($i=0; $i < $length; $i++){ 
+                                                if($rec['STVSBGI_CODE'][$i] == $school){
                                           
-                                            echo '<option value = "'.$rec['STVSBGI_CODE'][$i].'"> '.$rec['STVSBGI_DESC'][$i].'</option>';
+                                            echo '<option value = "'.$rec['STVSBGI_CODE'][$i].'" selected> '.$rec['STVSBGI_DESC'][$i].'</option>';
+                                                }
+                                                else{
+                                                  echo '<option value = "'.$rec['STVSBGI_CODE'][$i].'"> '.$rec['STVSBGI_DESC'][$i].'</option>';
+                                                }
                                           }
                                          
                                           

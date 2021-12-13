@@ -10,7 +10,7 @@
                                              
                                               for ($i=0; $i < $length; $i++){ 
                                           
-                                            echo '<option value = "'.$rec['SBGI_CODE'][$i].'"> '.$rec['CRSE_NUMB_FROM_SCHOOL'][$i].'</option>';
+                                            echo '<option value = "'.$rec['CRSE_NUMB_FROM_SCHOOL'][$i].'"> '.$rec['CRSE_NUMB_FROM_SCHOOL'][$i].'</option>';
                                           }
                                          
                                           
