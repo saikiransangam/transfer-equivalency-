@@ -36,12 +36,12 @@
                                  
                                  // var_dump($item);
                               ?> <tr>
-                                 <td><?php echo '<input type="checkbox" data-toggle="tooltip" data-placement="bottom" title class="select-checkbox" data-orginal-title="Add To Favourites">'?>
+                                 <td><?php echo '<input type="checkbox"  data-placement="bottom" title class="select-checkbox"  id ="course_fav" data-orginal-title="Add To Favourites">'?></td>
                                  <td><?php echo $table_res['SUBJ_CODE_FROM_SCHOOL'][$i]. ' '.$table_res['CRSE_NUMB_FROM_SCHOOL'][$i] ?></td>
                                  <td><?php echo $table_res['CRSE_TITLE_FROM_SCHOOL'][$i] ?></td>
                                  <td><?php echo $table_res['SHBTATC_CREDITS_FROM_SCHOOL'][$i] ?></td>
                                  <td><?php echo vsprintf(str_replace('~', '%s', $table_res['TEST'][$i]), explode(" ", $table_res['TEST_CON'][$i])) ?></td>
-                                 <td><?php echo str_replace('~', explode(" ", $table_res['TEST_CON'][$i])[0],  $table_res['TEST1'][$i]) ?></td>
+                                 <td><?php echo vsprintf(str_replace('~', '%s', substr($table_res['TEST1'][$i], 0, -2)), explode(" ", $table_res['TEST_CON'][$i])) ?></td>
                                  <td><?php echo $table_res['INST_CREDITS_ODU'][$i]?></td>
                                </tr>
                                <?php         }

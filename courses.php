@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-<3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.css"/>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
@@ -22,7 +21,6 @@
   <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js"></script>
   <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/select/1.3.3/js/dataTables.select.min.js"></script>
-  <script src="courses.js"></script>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +29,7 @@
 <body>
 <script>
     $(document).ready(function() {
-    $('#myTable').DataTable({
+    table = $('#myTable').DataTable({
       "pagingType" : "full_numbers",
       "lenghtMenu": [
         [10, 25, 50, -1],
@@ -57,6 +55,8 @@
       ],
     });
     });
+
+    
   </script>
   <script> 
    $(document).on("click", "#counselor", function () {
@@ -68,11 +68,7 @@
               
   });
   </script>
-  <script>
-    $('#myTable').on('change', 'input[type="checkbox"]', function( ) {
-             alert(this.value)
-        } );
-  </script>
+  
 <script>
          $(document).ready(function(){
              var state= document.getElementById("selectstate").value;
@@ -92,7 +88,121 @@
 
 
            });*/
-       
+
+          /* $document('#mycourses').click(function() {
+  var tblData = table.rows('.selected').data();
+  var tmpData;
+  alert("select");
+  $.each(tblData, function(i, val) {
+    tmpData = tblData[i];
+    alert(tmpData);
+  }); */
+  $(document).on("click", "#email_send", function(){
+    var first_name = document.getElementById("#fname").value;
+    var last_name = document.getElementById("#lname").value;
+    var email_id = document.getElementById("#emid").value;
+    var table_list = {html: $('#course_list').html()};
+    $.ajax({
+                url: 'email.php',
+                type: 'POST',
+                datatype: 'json',
+                data: {frst_nm : first_name, lst_nm: last_name, email: email_id, table_send: table_list},
+                
+                success: function(html){
+                    $('#modal2').modal('hide');
+                    alert("Email sent");
+                      },
+                error: function(){
+                    alert("error");
+                }
+           });
+  });
+
+  $(document).on("change", "[type=checkbox]", function(){
+
+    //alert("hi");
+    if ($(this).is(":checked")){
+      //alert("hi");
+      var table_updated = $('#myTable').DataTable();
+      var tbl_val = table.row($(this).closest('tr')[0]).data();
+      //alert(table_updated.row($(this).closest('tr')).data());
+      //var tmpData;
+      var school_selected = $('#selectschool option:selected').text();
+      var school_code =  document.getElementById("selectschool").value;
+      var row_body= ' ';
+      //alert("hello");
+      //alert(e, dt, type, indexes, "hello");
+      //alert($(this).rowIndex);
+      //alert(school_selected);
+      var course_code_modified = tbl_val[1].replace(' ','_');
+      var i = 0;
+      row_body= '<tr id = "'+school_code+'_'+course_code_modified+'"><td>' + school_selected + '</td>';
+      var skip_row = true;
+      $.each(tbl_val, function(i, val) {
+        if(skip_row){
+          skip_row = false;
+        }
+        else{
+      
+          if(i == 0){
+            row_body= '<tr id = "'+school_code+'_'+tbl_val[i].replace(' ','_')+'"><td>' + school_selected + '</td>';
+            i++;
+          }
+          else{
+        
+        row_body = row_body + '<td>' + tbl_val[i] + '</td>';
+        }
+        }
+    //tmpData = tbl_val[i];
+    //alert("hello");
+    //alert(tmpData);
+  });
+  row_body = row_body + '</tr>';
+  $('#favtable').append(row_body);
+  }
+    else{
+
+    
+
+    if(!$(this).is(":checked")){
+      //alert("hello");
+      var tbl_val = table.row($(this).closest('tr')[0]).data();
+      var school_code =  document.getElementById("selectschool").value;//$('#selectschool option:selected').value;
+      var skip_row = true;
+      $.each(tbl_val, function(i, val) {
+        if(skip_row){
+          skip_row = false;
+        }else{
+          //var crs_modify = tbl_val[i].replace(' ','_');
+          var remove_id = school_code+'_'+tbl_val[i].replace(' ','_');
+          //alert(remove_id);
+          $('#'+remove_id).remove();
+          return false;
+        } }); 
+      }
+  }
+
+  /*$.each(tbl_val, function(i, val) {
+    tmpData = tbl_val[i][1];
+    
+    alert(tmpData);
+  });*/
+  //alert($(this).data());
+  $('#courses_count').empty();
+  $('#courses_count').text($('#course_list tr').length -1);
+  });
+
+  /* $(document).on("click", "#mycourses", function() { 
+    var tblData = table.rows('.selected').data();
+    //alert(tblData.data());
+    var tmpData;
+
+  $.each(tblData, function(i, val) {
+    tmpData = tblData[i][1];
+
+    alert(tmpData);
+  });
+});*/
            
 
            $('#selectstate').change(function(){
@@ -131,6 +241,8 @@
               success: function(html){
                 $('#tablechange').empty();
                 $('#tablechange').append(html);
+                //table.ajax.reload();
+               //table.rows.add(html).draw();
               },
               error: function(){
                 alert("error");
@@ -238,8 +350,14 @@
         })
         
       });
-       </script>
-     <!-- <script>
+
+     
+      </script>
+    
+
+
+
+       <!-- <script>
          $(document).ready(function(){
              var state= document.getElementById("selectstate").value;
              var subject= document.getElementById("selectsubject").value;
@@ -265,7 +383,7 @@
            
        
           
-      </script>-->
+      </script> -->
        
        
 
@@ -385,8 +503,8 @@
               <div class="w3-container">
                   <div class="w3-right-align pt-2">
                   <button id="counselor" style="background-color:#00223d; color:white" class="w3-button w3-border w3-small" target='_blank'>Contacta Transfer Counselor</button>
-                  <button id="mycourses" style="background-color:#00223d; color:white" class="w3-button w3-border w3-small" data-toggle="modal" data-target="#modal1">My Courses
-                  <span class="badge badge-light ml-1 badgecount"></span></button>
+                  <button id="mycourses" style="background-color:#00223d; color:white" class="w3-button w3-border w3-small" data-toggle="modal" data-target="#modal1">My Courses  
+                  <span  id = "courses_count"class="badge badge-light ml-1 badgecount">0</span></button>
                   <button id="email" style="background-color:#00223d; color:white" class="w3-button w3-border w3-small" data-toggle="modal" data-target="#modal2">Email My Courses</button>
                   <button id="print" style="background-color:#00223d; color:white" onclick="window.print()" class="w3-button w3-border w3-small">print &nbsp;<i class="fas fa-print"></i></button> 
 
@@ -400,6 +518,7 @@
                              <!--Header-->
                               <div class="modal-header">
                                   <h3 class="modal-title" style="font-weight: bold; font-family: Calibri">My Courses</h3>
+                                  
                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                               </div>
                               <!--body-->
@@ -461,7 +580,7 @@
                               <label>Email ID:</label>
                               <input type="email" class="form-control form-control-sm emailid" id="emid" name="emailid" required>
                             </div>
-                              <button type="button" class="btn btn-sm email_send" style="background-color: #003057; color:white">Send</button>
+                              <button type="button" class="btn btn-sm email_send" id="email_send" style="background-color: #003057; color:white">Send</button>
                           </form>
                           <div class="reqemail mt-2" styel="color:red"></div>
                         </div>
@@ -525,12 +644,13 @@
                                  
                                  // var_dump($item);
                               ?> <tr>
-                                 <td><?php echo '<input type="checkbox" data-toggle="tooltip" data-placement="bottom" title class="select-checkbox" id ="course_fav" data-orginal-title="Add To Favourites">'?>
+                                 <td><?php echo '<input type="checkbox" data-placement="bottom" title class="select-checkbox" id ="course_fav" data-orginal-title="Add To Favourites">'?></td>
                                  <td><?php echo $table_res['SUBJ_CODE_FROM_SCHOOL'][$i]. ' '.$table_res['CRSE_NUMB_FROM_SCHOOL'][$i] ?></td>
                                  <td><?php echo $table_res['CRSE_TITLE_FROM_SCHOOL'][$i] ?></td>
                                  <td><?php echo $table_res['SHBTATC_CREDITS_FROM_SCHOOL'][$i] ?></td>
                                  <td><?php echo vsprintf(str_replace('~', '%s', $table_res['TEST'][$i]), explode(" ", $table_res['TEST_CON'][$i])) ?></td>
-                                 <td><?php echo str_replace('~', explode(" ", $table_res['TEST_CON'][$i])[0],  substr($table_res['TEST1'][$i], 0, -2)) ?></td>
+                                 <td><?php echo vsprintf(str_replace('~', '%s', substr($table_res['TEST1'][$i], 0, -2)), explode(" ", $table_res['TEST_CON'][$i])) ?></td>
+                                 
                                  <td><?php echo $table_res['INST_CREDITS_ODU'][$i]?></td>
                                </tr>
                                <?php         }

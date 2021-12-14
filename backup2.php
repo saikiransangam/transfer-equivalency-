@@ -239,3 +239,6 @@ FROM V_WX_EQUIVALENCY_LIST WHERE SBGI_CODE ='".$_POST['school_state']."'";
 
        <input type="text" class="form-control-sm col-sm-12" style="border: 1px solid #d1d1e0; box-shadow: 0 2px 2px -2px gray; font-size: 0.7em" placeholder="search Subject">
        <input type="text" class="form-control-sm col-sm-12" style="border: 1px solid #d1d1e0; box-shadow: 0 2px 2px -2px gray; font-size: 0.7em" placeholder="Search Course Number">
+
+
+       <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/af-2.2.2/b-1.5.1/b-colvis-1.5.1/b-flash-1.5.1/b-html5-1.5.1/b-print-1.5.1/cr-1.4.1/fc-<3.2.4/fh-3.1.3/kt-2.3.2/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.4/sl-1.2.5/datatables.min.css"/>
